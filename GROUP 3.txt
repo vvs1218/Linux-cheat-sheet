@@ -1,0 +1,181 @@
+In Between Linked Lists
+
+class ListNode {
+    int data;
+    ListNode next;
+
+    ListNode(int data) {
+        this.data = data;
+        next = null;
+    }
+}
+
+public class Solution {
+    public static LinkedListNode mergeInBetween(LinkedListNode list1, int a, int b, LinkedListNode list2) {
+        LinkedListNode tail = list2, cur = list1, s, e;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+        for (int i = 1; i < a; i++) {
+            cur = cur.next;
+        }
+        s = cur;
+        for (int i = 0; i <= b - a; i++) {
+            cur = cur.next;
+        }
+        e = cur;
+        s.next = list2;
+        tail.next = e.next;
+        return list1;
+    }
+}
+-----------------------------------------------
+Symmetric Binary Tree
+
+
+public class Solution {
+     static boolean isMirror(BinaryTreeNode<Integer> node1, BinaryTreeNode<Integer> node2)
+    {
+        if (node1 == null && node2 == null)
+            return true;
+        if (node1 != null && node2 != null
+            && node1.data == node2.data)
+            return (isMirror(node1.left, node2.right)
+                    && isMirror(node1.right, node2.left));
+        return false;
+    }
+	public static boolean isSymmetric(BinaryTreeNode<Integer> root){
+	 return isMirror(root, root);   
+	}
+}
+--------------------------------------------------------------
+War on NinjaLand II
+import java.util.*;
+class Solution {
+     public static int search(BinaryTreeNode<Integer> root,
+                              int num,
+                              Map<Integer,
+                             Set<Integer> > levelOrderMap)
+    {
+        if (root != null)
+        {
+            // Condition to check whether target
+            // node is found or not in a tree
+            if (root.data == num)
+            {
+ 
+                levelOrderStoredInMap(root.left, 1,
+                                      levelOrderMap);
+                levelOrderStoredInMap(root.right, 1,
+                                      levelOrderMap);
+                // Return statements to prevent
+                // further function calls
+                return 1;
+            }
+            int k = search(root.left, num, levelOrderMap);
+            if (k > 0)
+            {
+                // store root in map with k
+                storeRootAtK(root, k, levelOrderMap);
+                // store level order for other branch
+                levelOrderStoredInMap(root.right, k + 1,
+                                      levelOrderMap);
+                return k + 1;
+            }
+            k = search(root.right, num, levelOrderMap);
+            if (k > 0)
+            {
+                // store root in map with k
+                storeRootAtK(root, k, levelOrderMap);
+                // store level order for other branch
+                levelOrderStoredInMap(root.left, k + 1,
+                                      levelOrderMap);
+                return k + 1;
+            }
+        }
+        return -1 ; // Base condition
+    }
+    
+    
+     public static void levelOrderStoredInMap(
+        BinaryTreeNode<Integer> root, int k,
+        Map<Integer, Set<Integer> > levelOrderMap)
+    {
+        if (root != null) {
+            storeRootAtK(root, k, levelOrderMap);
+            levelOrderStoredInMap(root.left, k + 1,
+                                  levelOrderMap);
+            levelOrderStoredInMap(root.right, k + 1,
+                                  levelOrderMap);
+        }
+    }
+    
+    
+     private static void
+    storeRootAtK(BinaryTreeNode<Integer> root, int k,
+                 Map<Integer, Set<Integer> > levelOrderMap)
+    {
+        if (levelOrderMap.containsKey(k)) {
+            levelOrderMap.get(k).add(root.data);
+        }
+        else {
+            Set<Integer> set = new HashSet<>();
+            set.add(root.data);
+            levelOrderMap.put(k, set);
+        }
+    }
+    
+    
+    static void bomb(BinaryTreeNode<Integer> root, int target) 
+    { 
+        // Write your code here
+         Map<Integer, Set<Integer> > levelOrderMap
+            = new HashMap<>();
+        search(root, target , levelOrderMap);
+        
+        System.out.println(target);
+        for (Integer level : levelOrderMap.keySet())
+        {
+            for (Integer val : levelOrderMap.get(level))
+            {
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+        
+    } 
+}
+----------------------------------------------------------------------
+Find the Celebrity
+
+import java.util.*;
+class Solution {
+    public static int celebrity(int[][] mat, int m) {
+        //Write your code here
+        
+     Stack<Integer> s = new Stack<>() ; 
+	  for(int i = 0 ; i < m ; i++) {
+		  s.push(i) ; 
+	  }
+	  while(s.size() > 1){
+		  int a = s.pop(); 
+		  int b = s.peek(); 
+		  
+		  if(mat[a][b] == 1) {
+			  continue ; 
+		  }else if(mat[b][a] == 1) {
+			  s.pop() ; 
+			  s.push(a) ; 
+		  }
+	  }
+	  int c = s.pop() ; 
+	  
+	  for(int i = 0 ; i < m ; i++) {
+		  if(mat[c][i] == 1) {
+			  return -1 ;
+		  }
+	  }  
+	return c;  
+    }
+}
+-------------------------------------------------------------------
